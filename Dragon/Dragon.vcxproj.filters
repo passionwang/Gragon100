@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Public">
+      <UniqueIdentifier>{dc7cceaf-ed65-44b9-910b-5c4e984234b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Eveluation">
+      <UniqueIdentifier>{e61e4330-43db-4482-99e0-bae0863e0171}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoveGenerator">
+      <UniqueIdentifier>{31d22c33-376c-4604-9b61-4641f4f5f7fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine">
+      <UniqueIdentifier>{3a7fbbec-9b34-4e79-bb23-33bdbb412d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TranspositionTable">
+      <UniqueIdentifier>{506fd306-6765-42e6-9cd8-4ad7138cfe3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HistoryHeuristic">
+      <UniqueIdentifier>{b334e67d-dcb0-45f2-b576-6021ac3eeef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\AlphaBetaAndTT">
+      <UniqueIdentifier>{efe8fc78-cbc4-4761-918f-6be9d8e8754e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\AlphaBetaEngine">
+      <UniqueIdentifier>{9ada5ecd-4ba4-4cca-b58d-3aadab09678a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\AspirationSearch">
+      <UniqueIdentifier>{8443c00e-f759-41ac-a00c-f8bbb805db8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\IDAlphabeta">
+      <UniqueIdentifier>{912e04ae-0c57-4985-88ea-4590c095554d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\NegamaxEngine">
+      <UniqueIdentifier>{a78ed5da-ae62-4446-b834-0e6d1b3db1ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\PVS_Engine">
+      <UniqueIdentifier>{8d0dd173-f8cd-4e54-8e45-a1b9c5d4d58a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\Alphabeta_HH">
+      <UniqueIdentifier>{8b757d4b-0365-4dae-9c40-10d231bfb677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\FAlphaBetaEngine">
+      <UniqueIdentifier>{5e6e9080-0ddd-4322-ad79-77645895cc92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SearchEngine\NegaScout+TT+HH">
+      <UniqueIdentifier>{e196b63b-17bc-4c3e-9747-2157a8f6cf0d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dragon.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DragonDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Eveluation\Eveluation.h">
+      <Filter>Eveluation</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveGenerator\MoveGenerator.h">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\SearchEngine.h">
+      <Filter>SearchEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\define.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\PublicToCountSpace.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\PublicToMakeMove.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="TranspositionTable\TranspositionTable.h">
+      <Filter>TranspositionTable</Filter>
+    </ClInclude>
+    <ClInclude Include="HistoryHeuristic\HistoryHeuristic.h">
+      <Filter>HistoryHeuristic</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\AlphaBetaAndTT\AlphaBetaAndTT.h">
+      <Filter>SearchEngine\AlphaBetaAndTT</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\AlphaBetaEngine\AlphaBetaEngine.h">
+      <Filter>SearchEngine\AlphaBetaEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\AspirationSearch\AspirationSearch.h">
+      <Filter>SearchEngine\AspirationSearch</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\IdAlphabeta\IDAlphabeta.h">
+      <Filter>SearchEngine\IDAlphabeta</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\NegamaxEngine\NegamaxEngine.h">
+      <Filter>SearchEngine\NegamaxEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\PVS_Engine\PVS_Engine.h">
+      <Filter>SearchEngine\PVS_Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\Alphabeta_HH\Alphabeta_HH.h">
+      <Filter>SearchEngine\Alphabeta_HH</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\FAlphaBetaEngine\FAlphaBetaEngine.h">
+      <Filter>SearchEngine\FAlphaBetaEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchEngine\NegaScout+TT+HH\NegaScout_TT_HH.h">
+      <Filter>SearchEngine\NegaScout+TT+HH</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Dragon.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DragonDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Eveluation\Eveluation.cpp">
+      <Filter>Eveluation</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveGenerator\MoveGenerator.cpp">
+      <Filter>MoveGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\SearchEngine.cpp">
+      <Filter>SearchEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Public\PublicToCountSpace.h.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="Public\PublicToMakeMove.cpp">
+      <Filter>Public</Filter>
+    </ClCompile>
+    <ClCompile Include="TranspositionTable\TranspositionTable.cpp">
+      <Filter>TranspositionTable</Filter>
+    </ClCompile>
+    <ClCompile Include="HistoryHeuristic\HistoryHeuristic.cpp">
+      <Filter>HistoryHeuristic</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\AlphaBetaAndTT\AlphaBetaAndTT.cpp">
+      <Filter>SearchEngine\AlphaBetaAndTT</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\AlphaBetaEngine\AlphaBetaEngine.cpp">
+      <Filter>SearchEngine\AlphaBetaEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\AspirationSearch\AspirationSearch.cpp">
+      <Filter>SearchEngine\AspirationSearch</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\IdAlphabeta\IDAlphabeta.cpp">
+      <Filter>SearchEngine\IDAlphabeta</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\NegamaxEngine\NegamaxEngine.cpp">
+      <Filter>SearchEngine\NegamaxEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\PVS_Engine\PVS_Engine.cpp">
+      <Filter>SearchEngine\PVS_Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\Alphabeta_HH\Alphabeta_HH.cpp">
+      <Filter>SearchEngine\Alphabeta_HH</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\FAlphaBetaEngine\FAlphaBetaEngine.cpp">
+      <Filter>SearchEngine\FAlphaBetaEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchEngine\NegaScout+TT+HH\NegaScout_TT_HH.cpp">
+      <Filter>SearchEngine\NegaScout+TT+HH</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Dragon.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Dragon.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Dragon.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\Board.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\chess.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
