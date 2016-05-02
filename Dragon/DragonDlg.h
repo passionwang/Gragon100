@@ -59,4 +59,5 @@ public:
 	//鼠标控制黑棋行进
 	void Move(int iX,int iY);   
 	CEdit m_Output;
+	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 };

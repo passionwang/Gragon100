@@ -7,6 +7,8 @@
 #include<iostream>
 using namespace std;
 
+#define iMenu   32778
+
 #define WHITE   (-1)
 #define BLACK   (1)
 

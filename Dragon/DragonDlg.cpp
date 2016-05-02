@@ -299,7 +299,6 @@ void CDragonDlg::iMove()
 	BecomeKing(m_ChessBoard);//4.成王判断
 	CString sNodeCount;
 	sNodeCount.Format(L" Cost %d ms. %d Nodes were eveluated. %d TT Node Be Found.%d TTHH Node Be Found.", GetTickCount() - timecount,G_nCountEv,G_nCountTT,G_nCountTTHH);
-//	sNodeCount.Format(L" Cost %d ms. %d Nodes were eveluated.", GetTickCount() - timecount,count);
 	m_Output.SetWindowText(sNodeCount);
 	G_nCountEv = 0;
 	G_nCountTT = 0;
@@ -666,3 +665,52 @@ void BecomeKing(int CurPosition[10][10])
 }
 
 
+
+
+BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	if (!HIWORD(wParam))  
+    {  
+		switch(LOWORD(wParam))
+		{
+		case iMenu+0:
+			m_bGo = BLACK_GO;
+			break;
+		case iMenu+1:
+			m_bGo = WRITE_GO;
+			break;
+		case iMenu+2:
+			m_pSE->SetSearchDepth(1);
+			break;
+		case iMenu+3:
+			m_pSE->SetSearchDepth(2);
+			break;
+		case iMenu+4:
+			m_pSE->SetSearchDepth(3);
+			break;
+		case iMenu+5:
+			m_pSE->SetSearchDepth(4);
+			break;
+		case iMenu+6:
+			m_pSE->SetSearchDepth(5);
+			break;
+		case iMenu+7:
+			m_pSE->SetSearchDepth(6);
+			break;
+		case iMenu+8:
+			m_pSE->SetSearchDepth(7);
+			break;
+		case iMenu+9:
+			m_pSE->SetSearchDepth(8);
+			break;
+		case iMenu+10:
+			m_pSE->SetSearchDepth(9);
+			break;
+		case iMenu+11:
+			m_pSE->SetSearchDepth(10);
+			break;
+		}
+    }  
+	return CDialogEx::OnCommand(wParam, lParam);
+}
