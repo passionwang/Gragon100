@@ -669,9 +669,9 @@ void CMoveGenerator::ClearData()
 		{
 			for(int k=0;k<10;k++)
 			{
-				m_step[i][j][k]; //左下下==1 右下下==2  左上上==3   右上上==4
-				m_step_king_kongge1[i][j][k];
-				m_step_king_kongge2[i][j][k];
+				m_step[i][j][k] = 0; //左下下==1 右下下==2  左上上==3   右上上==4
+				m_step_king_kongge1[i][j][k] = 0;
+				m_step_king_kongge2[i][j][k] = 0;
 			}
 		}
 	}

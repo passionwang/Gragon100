@@ -169,7 +169,7 @@ BOOL CDragonDlg::OnInitDialog()
 	pMG = &MoveGenerator;
 	
 	//此处设置搜索引擎深度
-	m_pSE->SetSearchDepth(10);
+	m_pSE->SetSearchDepth(6);
 	//设置走法生成器-只有一个
 	m_pSE->SetMoveGenerator(pMG);
 	//设置估值-只有一个
