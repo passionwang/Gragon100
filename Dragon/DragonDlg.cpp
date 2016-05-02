@@ -83,6 +83,7 @@ END_MESSAGE_MAP()
 
 CDragonDlg::CDragonDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CDragonDlg::IDD, pParent)
+	, m_bGo(BLACK_GO)
 {
 	for(int i=0;i<10;i++)
 	{
@@ -289,9 +290,9 @@ extern int G_nCountTT;
 extern int G_nCountTTHH;
 void CDragonDlg::iMove()          
 {
-	if (TRUE == m_bGameOver)
+	if (TRUE == m_bGameOver || WRITE_GO != m_bGo)
 		return;
-
+	m_bGo = BLACK_GO;
 	int timecount;
 	timecount = GetTickCount();
 	m_pSE->SearchAGoodMove(m_ChessBoard);	
@@ -323,7 +324,7 @@ void CDragonDlg::Move(int iX,int iY)
 {
 	int nCountMove;
 	
-	if (TRUE == m_bGameOver/*m_bGameOver*/)
+	if (TRUE == m_bGameOver || BLACK_GO != m_bGo)
 		return;
 //	memcpy(m_BackupChessBoard, m_ChessBoard, sizeof(m_ChessBoard));
 	m_iM = (iY-iBT)/iBS;  //将座标转换成数组下标
@@ -376,6 +377,7 @@ void CDragonDlg::Move(int iX,int iY)
 				MakeMoveSure(m,n,oMG.m_nMoveList[0][i].m_Type,m_ChessBoard);
 				//4.成王判断
 				BecomeKing(m_ChessBoard);
+				m_bGo = WRITE_GO;
 			}
 		}
 		InvalidateRect(NULL,FALSE);

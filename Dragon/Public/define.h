@@ -10,6 +10,9 @@ using namespace std;
 #define WHITE   (-1)
 #define BLACK   (1)
 
+#define WRITE_GO   TRUE
+#define BLACK_GO   FALSE
+
 #define Left_Down   (1)
 #define Right_Down  (2)
 #define Left_Up     (3)

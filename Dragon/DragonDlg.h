@@ -40,7 +40,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	BOOL m_bGameOver;
-	
+	BOOL m_bGo;
 	int m_BackupChessBoard[10][10];
 //	MOVECHESS m_MoveChess;
 	POINT m_ptMoveChess;
