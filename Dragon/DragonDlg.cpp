@@ -92,6 +92,10 @@ CDragonDlg::CDragonDlg(CWnd* pParent /*=NULL*/)
 			m_ChessBoard[i][j] = InitChessBoard[i][j];
 		}
 	}
+	//初始棋盘记录，加入链表
+	CUndoNode* pNode = new CUndoNode(m_ChessBoard,BLACK_GO);
+	m_stackUndo.push(pNode);
+
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -106,6 +110,7 @@ BEGIN_MESSAGE_MAP(CDragonDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -153,10 +158,9 @@ BOOL CDragonDlg::OnInitDialog()
 
 	memcpy(m_ChessBoard, InitChessBoard, sizeof(InitChessBoard));//初始化棋盘
 	
-	CMoveGenerator *pMG;
-	CEveluation *pEvel;
+	
 
-	pEvel = new CEveluation;
+	m_pEvel = new CEveluation;
 	//此处修改搜索引擎
 //	m_pSE = new CNegamaxEngine;//负极大值-最基本
 //	m_pSE = new CAlphaBetaEngine;//alpha-Beta剪枝
@@ -165,16 +169,16 @@ BOOL CDragonDlg::OnInitDialog()
 //	m_pSE = new CPVS_Engine;//极小窗口搜索
 //	m_pSE = new CIDAlphabeta;//迭代深化
 //	m_pSE = new CAlphaBetaAndTT;//alpha-Beta剪枝+TT置换表
-//	m_pSE = new CAlphabeta_HH;//alpha-Beta剪枝+HH历史启发
-	m_pSE = new CNegaScout_TT_HH;//负极大值+TT置换表+HH历史启发
-	pMG = &MoveGenerator;
+	m_pSE = new CAlphabeta_HH;//alpha-Beta剪枝+HH历史启发
+//	m_pSE = new CNegaScout_TT_HH;//负极大值+TT置换表+HH历史启发
+	m_pMG = &MoveGenerator;
 	
 	//此处设置搜索引擎深度
 	m_pSE->SetSearchDepth(6);
 	//设置走法生成器-只有一个
-	m_pSE->SetMoveGenerator(pMG);
+	m_pSE->SetMoveGenerator(m_pMG);
 	//设置估值-只有一个
-	m_pSE->SetEveluator(pEvel);
+	m_pSE->SetEveluator(m_pEvel);
 //	m_MoveChess.nChessID = NOCHESS;
 	m_bGameOver = FALSE;//this code does not contents in books.
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -305,7 +309,10 @@ void CDragonDlg::iMove()
 	G_nCountTTHH = 0;
 	InvalidateRect(NULL, FALSE);
 	UpdateWindow();
-	
+	//记录走过的棋盘，加入链表
+	CUndoNode* pNode = new CUndoNode(m_ChessBoard,WRITE_GO);
+	m_stackUndo.push(pNode);
+
 	if (IsGameOver(-1))
 	{
 		m_bGameOver = TRUE;
@@ -377,6 +384,9 @@ void CDragonDlg::Move(int iX,int iY)
 				//4.成王判断
 				BecomeKing(m_ChessBoard);
 				m_bGo = WRITE_GO;
+				//记录走过的棋盘，加入链表
+				CUndoNode* pNode = new CUndoNode(m_ChessBoard,BLACK_GO);
+				m_stackUndo.push(pNode);
 			}
 		}
 		InvalidateRect(NULL,FALSE);
@@ -664,7 +674,36 @@ void BecomeKing(int CurPosition[10][10])
 	}
 }
 
+void CDragonDlg::UndoPosition()
+{
+	if(m_stackUndo.size() >= 2)
+	{
+		CUndoNode* pNode = m_stackUndo.top();
+		m_bGo = pNode->m_bGo;
+		delete pNode;
+		m_stackUndo.pop();
 
+		pNode = m_stackUndo.top();
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				m_ChessBoard[i][j] = pNode->m_NowPosition[i][j];
+			}
+		}
+	}
+	InvalidateRect(NULL,FALSE);
+	UpdateWindow();
+}
+void CDragonDlg::DestoryListPosition()
+{
+	for(unsigned int i=0;i<m_stackUndo.size();i++)
+	{
+		CUndoNode* pNode = m_stackUndo.top();
+		delete pNode;
+		m_stackUndo.pop();
+	}
+}
 
 
 BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
@@ -674,13 +713,13 @@ BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
     {  
 		switch(LOWORD(wParam))
 		{
-		case iMenu+0:
+		case iMenu+0://选择先后手
 			m_bGo = BLACK_GO;
 			break;
 		case iMenu+1:
 			m_bGo = WRITE_GO;
 			break;
-		case iMenu+2:
+		case iMenu+2://设置搜索深度
 			m_pSE->SetSearchDepth(1);
 			break;
 		case iMenu+3:
@@ -710,7 +749,20 @@ BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		case iMenu+11:
 			m_pSE->SetSearchDepth(10);
 			break;
+		case iMenu+13://撤销
+			UndoPosition();
+			break;
 		}
     }  
 	return CDialogEx::OnCommand(wParam, lParam);
+}
+
+
+void CDragonDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+	// TODO: 在此处添加消息处理程序代码
+	DestoryListPosition();//销毁撤销的信息
+	delete m_pEvel;
+	delete m_pSE;
 }

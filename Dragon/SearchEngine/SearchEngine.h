@@ -10,7 +10,7 @@ class CSearchEngine : public CPublicToMakeMove
 {
 public:
 	CSearchEngine();
-	~CSearchEngine();
+	virtual ~CSearchEngine();
 	
 	virtual void SearchAGoodMove(int position[10][10]) = 0;
 	

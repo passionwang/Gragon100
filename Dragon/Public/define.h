@@ -78,5 +78,31 @@ public:
 	}
 };
 
+class CUndoNode
+{
+public:
+	CUndoNode()
+	{
+
+	}
+	CUndoNode(int Position[10][10],BOOL bGo)
+	{
+		m_bGo = bGo;
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				m_NowPosition[i][j] = Position[i][j];
+			}
+		}
+	}
+	~CUndoNode()
+	{
+
+	}
+public:
+	int m_NowPosition[10][10];
+	BOOL m_bGo;
+};
 
 #endif //__INCLUDE_DEFINE_H__

@@ -13,7 +13,8 @@
 #include "Alphabeta_HH.h"
 #include "NegaScout_TT_HH.h"
 #include "afxwin.h"
-
+#include <stack>
+using namespace std;
 // CDragonDlg 对话框
 class CDragonDlg : public CDialogEx
 {
@@ -49,8 +50,10 @@ private:
 	int m_nBoardWidth; 
 	int m_nBoardHeight;
 	CSearchEngine *m_pSE;
-	
-	
+	CMoveGenerator *m_pMG;
+	CEveluation *m_pEvel;
+
+	stack<CUndoNode*> m_stackUndo;
 //	CMoveGenerator m_oMG;
 	
 public:
@@ -59,5 +62,8 @@ public:
 	//鼠标控制黑棋行进
 	void Move(int iX,int iY);   
 	CEdit m_Output;
+	void UndoPosition();
+	void DestoryListPosition();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnDestroy();
 };
