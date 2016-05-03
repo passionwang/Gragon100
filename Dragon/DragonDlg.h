@@ -42,8 +42,6 @@ protected:
 private:
 	BOOL m_bGameOver;
 	BOOL m_bGo;
-	int m_BackupChessBoard[10][10];
-//	MOVECHESS m_MoveChess;
 	POINT m_ptMoveChess;
 	CBitmap m_BoardBmp;
 	CImageList m_Chessman;

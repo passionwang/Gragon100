@@ -332,7 +332,6 @@ void CDragonDlg::Move(int iX,int iY)
 	
 	if (TRUE == m_bGameOver || BLACK_GO != m_bGo)
 		return;
-//	memcpy(m_BackupChessBoard, m_ChessBoard, sizeof(m_ChessBoard));
 	m_iM = (iY-iBT)/iBS;  //将座标转换成数组下标
 	m_iN = (iX-iBL)/iBS;
 	switch(m_ChessBoard[m_iM][m_iN])
@@ -697,7 +696,7 @@ void CDragonDlg::UndoPosition()
 }
 void CDragonDlg::DestoryListPosition()
 {
-	for(unsigned int i=0;i<m_stackUndo.size();i++)
+	while(m_stackUndo.size())
 	{
 		CUndoNode* pNode = m_stackUndo.top();
 		delete pNode;
