@@ -10,7 +10,7 @@ CIDAlphabeta::~CIDAlphabeta()
 
 }
 
-void CIDAlphabeta::SearchAGoodMove(int position[10][10])
+void CIDAlphabeta::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	CHESSMOVE backupmove;
 	CPublicToMakeMove ptmm;

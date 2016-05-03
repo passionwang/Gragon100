@@ -11,7 +11,7 @@ CAlphaBetaAndTT::~CAlphaBetaAndTT()
 
 
 int G_nCountTT;
-void CAlphaBetaAndTT::SearchAGoodMove(int position[10][10])
+void CAlphaBetaAndTT::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	CPublicToMakeMove ptmm;
 	memcpy(CurPosition, position, sizeof(CurPosition));

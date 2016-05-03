@@ -11,7 +11,7 @@ public:
 	CAlphabeta_HH();
 	virtual ~CAlphabeta_HH();
 
-	virtual void SearchAGoodMove(int position[10][10]);
+	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
 
 protected:
 	int alphabeta(int depth, int alpha, int beta);

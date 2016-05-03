@@ -12,8 +12,8 @@ using namespace std;
 #define WHITE   (-1)
 #define BLACK   (1)
 
-#define WRITE_GO   TRUE
-#define BLACK_GO   FALSE
+#define WRITE_GO   -1
+#define BLACK_GO   1
 
 #define Left_Down   (1)
 #define Right_Down  (2)
@@ -85,7 +85,7 @@ public:
 	{
 
 	}
-	CUndoNode(int Position[10][10],BOOL bGo)
+	CUndoNode(int Position[10][10],int bGo)
 	{
 		m_bGo = bGo;
 		for(int i=0;i<10;i++)
@@ -102,7 +102,7 @@ public:
 	}
 public:
 	int m_NowPosition[10][10];
-	BOOL m_bGo;
+	int m_bGo;
 };
 
 #endif //__INCLUDE_DEFINE_H__

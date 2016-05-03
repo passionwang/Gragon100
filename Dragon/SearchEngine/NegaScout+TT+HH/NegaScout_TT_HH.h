@@ -16,10 +16,10 @@ public:
 	CNegaScout_TT_HH();
 	virtual ~CNegaScout_TT_HH();
 
-	virtual void SearchAGoodMove(int position[10][10]);
+	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
 
 protected:
-	int NegaScout(int depth, int alpha, int beta);
+	int NegaScout(int depth, int alpha, int beta,int m_UpDown);
 };
 
 #endif // __INCLUDE_NEGASCOUT_TT_HH_H__

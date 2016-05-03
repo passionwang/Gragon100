@@ -10,7 +10,7 @@ CFAlphaBetaEngine::~CFAlphaBetaEngine()
 {
 }
 
-void CFAlphaBetaEngine::SearchAGoodMove(int position[10][10])
+void CFAlphaBetaEngine::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	CPublicToMakeMove ptmm;
 	memcpy(CurPosition, position, sizeof(CurPosition));

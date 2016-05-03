@@ -11,7 +11,7 @@ public:
 	CNegamaxEngine();
 	virtual ~CNegamaxEngine();
 
-	virtual void SearchAGoodMove(int position[10][10]);
+	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
 
 protected:
 	int NegaMax(int depth);

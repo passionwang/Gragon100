@@ -9,7 +9,7 @@ CAspirationSearch::~CAspirationSearch()
 {
 }
 
-void CAspirationSearch::SearchAGoodMove(int position[10][10])
+void CAspirationSearch::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	int x,y;
 	CPublicToMakeMove ptmm;

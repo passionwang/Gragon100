@@ -12,7 +12,7 @@ public:
 	CSearchEngine();
 	virtual ~CSearchEngine();
 	
-	virtual void SearchAGoodMove(int position[10][10]) = 0;
+	virtual void SearchAGoodMove(int position[10][10],int m_UpDown) = 0;
 	
 	virtual void SetSearchDepth(BYTE nDepth){m_nSearchDepth = nDepth;}
 	

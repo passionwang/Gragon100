@@ -11,7 +11,7 @@ CAlphabeta_HH::~CAlphabeta_HH()
 
 }
 
-void CAlphabeta_HH::SearchAGoodMove(int position[10][10])
+void CAlphabeta_HH::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	CPublicToMakeMove ptmm;
 	memcpy(CurPosition, position, sizeof(CurPosition));

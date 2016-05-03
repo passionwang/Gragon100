@@ -13,7 +13,7 @@ CNegamaxEngine::~CNegamaxEngine()
 {
 
 }
-void CNegamaxEngine::SearchAGoodMove(int position[10][10])
+void CNegamaxEngine::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	CPublicToMakeMove ptmm;
 	m_nMaxDepth = m_nSearchDepth;

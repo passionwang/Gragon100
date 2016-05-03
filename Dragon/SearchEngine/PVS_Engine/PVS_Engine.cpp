@@ -10,7 +10,7 @@ CPVS_Engine::~CPVS_Engine()
 {
 
 }
-void CPVS_Engine::SearchAGoodMove(int position[10][10])
+void CPVS_Engine::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	CPublicToMakeMove ptmm;
 	memcpy(CurPosition, position, sizeof(CurPosition));

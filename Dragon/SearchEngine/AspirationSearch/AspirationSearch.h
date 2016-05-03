@@ -12,7 +12,7 @@ public:
 	CAspirationSearch();
 	virtual ~CAspirationSearch();
 
-	virtual void SearchAGoodMove(int position[10][10]);
+	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
 };
 
 #endif // __INCLUDE_ASPIRATIONSEARCH_H__

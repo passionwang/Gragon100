@@ -14,7 +14,7 @@ CAlphaBetaEngine::~CAlphaBetaEngine()
 {
 
 }
-void CAlphaBetaEngine::SearchAGoodMove(int position[10][10])
+void CAlphaBetaEngine::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	CPublicToMakeMove ptmm;
 	memcpy(CurPosition, position, sizeof(CurPosition));

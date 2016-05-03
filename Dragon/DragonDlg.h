@@ -41,7 +41,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	BOOL m_bGameOver;
-	BOOL m_bGo;
+	int m_bGo;
+	
 	POINT m_ptMoveChess;
 	CBitmap m_BoardBmp;
 	CImageList m_Chessman;

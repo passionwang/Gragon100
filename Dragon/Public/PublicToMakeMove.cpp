@@ -67,16 +67,24 @@ void CPublicToMakeMove::MakeMoveQi(CHESSMOVE* move,int CurPosition[10][10],int t
 			move->From.x += 1;
 			break;
 		}
-		if(0 != type && 9 != move->From.y)
+		if(0 != type && -1 == type && 9 != move->From.y)
 		{
 			CurPosition[move->From.y][move->From.x] = 4;
+		}
+		if(0 != type && 1 == type && 0 != move->From.y) 
+		{
+			CurPosition[move->From.y][move->From.x] = 6;
 		}
 	}
 	else
 	{
-		if(0 != type && 9 != move->From.y)
+		if(0 != type && -1 == type && 9 != move->From.y)
 		{
 			CurPosition[move->From.y][move->From.x] = 4;
+		}
+		if(0 != type && 1 == type && 0 != move->From.y) 
+		{
+			CurPosition[move->From.y][move->From.x] = 6;
 		}
 	}
 	BecomeKing(CurPosition);
@@ -208,14 +216,20 @@ void CPublicToMakeMove::MakeMoveWANG(CHESSMOVE* move,int CurPosition[10][10],int
 			}
 			if(0 != type)
 			{
-				CurPosition[move->From.y][move->From.x] = -4;
+				if(-1 == type)
+					CurPosition[move->From.y][move->From.x] = -4;
+				else
+					CurPosition[move->From.y][move->From.x] = -6;
 			}
 		}
 		else
 		{
 			if(0 != type)
 			{
-				CurPosition[move->From.y][move->From.x] = -4;
+				if(-1 == type)
+					CurPosition[move->From.y][move->From.x] = -4;
+				else
+					CurPosition[move->From.y][move->From.x] = -6;
 			}
 		}
 }

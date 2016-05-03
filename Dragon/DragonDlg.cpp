@@ -19,6 +19,7 @@
 const int iBL=50;//棋盘左侧边距
 const int iBT=50;//棋盘上侧边距
 const int iBS=50;//棋盘棋位单位
+int m_UpDown;
 CMoveGenerator MG;
 int m_ChessBoard[10][10];
 const int InitChessBoard[10][10] =
@@ -42,8 +43,10 @@ void UnMakeMove(int CurPosition[10][10]);
 void MakeMoveQi(CHESSMOVE* move,int CurPosition[10][10]);
 BOOL IsGameOver(int nType)
 {
-	if(0 == MG.CreatePossibleMove(m_ChessBoard,1,1) && -1 == nType) return TRUE;
-	if (0 == MG.CreatePossibleMove(m_ChessBoard,1,-1) && 1 == nType) return TRUE;
+	if(0 == MG.CreatePossibleMove(m_ChessBoard,1,BLACK) && -1 == nType)
+		return TRUE;
+	if (0 == MG.CreatePossibleMove(m_ChessBoard,1,WHITE) && 1 == nType)
+		return TRUE;
 	return FALSE;
 }
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
@@ -85,6 +88,7 @@ CDragonDlg::CDragonDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CDragonDlg::IDD, pParent)
 	, m_bGo(BLACK_GO)
 {
+	m_UpDown = 1;
 	for(int i=0;i<10;i++)
 	{
 		for(int j=0;j<10;j++)
@@ -169,8 +173,8 @@ BOOL CDragonDlg::OnInitDialog()
 //	m_pSE = new CPVS_Engine;//极小窗口搜索
 //	m_pSE = new CIDAlphabeta;//迭代深化
 //	m_pSE = new CAlphaBetaAndTT;//alpha-Beta剪枝+TT置换表
-	m_pSE = new CAlphabeta_HH;//alpha-Beta剪枝+HH历史启发
-//	m_pSE = new CNegaScout_TT_HH;//负极大值+TT置换表+HH历史启发
+//	m_pSE = new CAlphabeta_HH;//alpha-Beta剪枝+HH历史启发
+	m_pSE = new CNegaScout_TT_HH;//负极大值+TT置换表+HH历史启发
 	m_pMG = &MoveGenerator;
 	
 	//此处设置搜索引擎深度
@@ -299,7 +303,9 @@ void CDragonDlg::iMove()
 	m_bGo = BLACK_GO;
 	int timecount;
 	timecount = GetTickCount();
-	m_pSE->SearchAGoodMove(m_ChessBoard);	
+
+	m_pSE->SearchAGoodMove(m_ChessBoard,m_UpDown);	
+
 	BecomeKing(m_ChessBoard);//4.成王判断
 	CString sNodeCount;
 	sNodeCount.Format(L" Cost %d ms. %d Nodes were eveluated. %d TT Node Be Found.%d TTHH Node Be Found.", GetTickCount() - timecount,G_nCountEv,G_nCountTT,G_nCountTTHH);
@@ -310,10 +316,10 @@ void CDragonDlg::iMove()
 	InvalidateRect(NULL, FALSE);
 	UpdateWindow();
 	//记录走过的棋盘，加入链表
-	CUndoNode* pNode = new CUndoNode(m_ChessBoard,WRITE_GO);
+	CUndoNode* pNode = new CUndoNode(m_ChessBoard,WRITE_GO * m_UpDown);
 	m_stackUndo.push(pNode);
 
-	if (IsGameOver(-1))
+	if (IsGameOver(WHITE * m_UpDown))
 	{
 		m_bGameOver = TRUE;
 		MessageBox(L"Game Over! Press New Game to replay...");
@@ -329,19 +335,29 @@ int nPosMove;
 void CDragonDlg::Move(int iX,int iY)     
 {
 	int nCountMove;
-	
-	if (TRUE == m_bGameOver || BLACK_GO != m_bGo)
-		return;
+	int nTemp;
 	m_iM = (iY-iBT)/iBS;  //将座标转换成数组下标
 	m_iN = (iX-iBL)/iBS;
-	switch(m_ChessBoard[m_iM][m_iN])
+	if(TRUE == m_bGameOver)//游戏结束
+		return;
+
+	if(0 == m_ChessBoard[m_iM][m_iN])//未拾到棋
+		return;
+
+	(m_ChessBoard[m_iM][m_iN] > 0) ? (nTemp = 1) :(nTemp = -1);
+
+	if (5 != m_ChessBoard[m_iM][m_iN] && nTemp * m_UpDown != m_bGo)//不是自己走
+		return;
+
+	
+	switch(m_ChessBoard[m_iM][m_iN] * m_UpDown)
 	{
 	case BLACK://找到当前被点击的点的走法，
 	case 2*BLACK:
 		m = m_iM;
 		n = m_iN;
 		UnMakeMove(m_ChessBoard);
-		nCountMove = oMG.CreatePossibleMove(m_ChessBoard,0,1);
+		nCountMove = oMG.CreatePossibleMove(m_ChessBoard,0,BLACK * m_UpDown);
 		nPosMove = 0;
 		for(int i=0;i<nCountMove;i++)
 		{
@@ -360,9 +376,10 @@ void CDragonDlg::Move(int iX,int iY)
 		}
 		break;
 	case 5:
+	case -5:
 		nPosMove = 0;
 		UnMakeMove(m_ChessBoard);
-		nCountMove = oMG.CreatePossibleMove(m_ChessBoard,0,1);
+		nCountMove = oMG.CreatePossibleMove(m_ChessBoard,0,BLACK * m_UpDown);
 		for(int i=0;i<nCountMove;i++)
 		{
 			if(m == oMG.m_nMoveList[0][i].From.y && n == oMG.m_nMoveList[0][i].From.x)
@@ -379,18 +396,18 @@ void CDragonDlg::Move(int iX,int iY)
 				//2.按照找到坐标行棋
 				MakeMoveQi(&oMG.m_nMoveList[0][i],m_ChessBoard);
 				//3.按照走的就真走了
-				MakeMoveSure(m,n,oMG.m_nMoveList[0][i].m_Type,m_ChessBoard);
+				MakeMoveSure(m,n,oMG.m_nMoveList[0][i].m_Type * m_UpDown,m_ChessBoard);
 				//4.成王判断
 				BecomeKing(m_ChessBoard);
 				m_bGo = WRITE_GO;
 				//记录走过的棋盘，加入链表
-				CUndoNode* pNode = new CUndoNode(m_ChessBoard,BLACK_GO);
+				CUndoNode* pNode = new CUndoNode(m_ChessBoard,BLACK_GO * m_UpDown);
 				m_stackUndo.push(pNode);
 			}
 		}
 		InvalidateRect(NULL,FALSE);
 		UpdateWindow();
-		if (IsGameOver(1))
+		if (IsGameOver(BLACK * m_UpDown))
 		{
 			m_bGameOver = TRUE;
 			MessageBox(L"Game Over! Press New Game to replay...");
@@ -432,52 +449,76 @@ void MakeMoveQi(CHESSMOVE* move,int CurPosition[10][10])
 			{
 			case Left_Down:
 				CurPosition[move->From.y+2][move->From.x-2] = -5;
-				if(-2 == CurPosition[move->From.y+1][move->From.x-1])
+				if(-2*m_UpDown == CurPosition[move->From.y+1][move->From.x-1])
 				{
-					CurPosition[move->From.y+1][move->From.x-1] = -4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y+1][move->From.x-1] = -4;
+					else
+						CurPosition[move->From.y+1][move->From.x-1] = -6;
 				}
 				else
 				{
-					CurPosition[move->From.y+1][move->From.x-1] = 4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y+1][move->From.x-1] = 4;
+					else
+						CurPosition[move->From.y+1][move->From.x-1] = 6;
 				}
 				move->From.y += 2;
 				move->From.x -= 2;
 				break;
 			case Right_Down:
 				CurPosition[move->From.y+2][move->From.x+2] = -5;
-				if(-2 == CurPosition[move->From.y+1][move->From.x+1])
+				if(-2*m_UpDown == CurPosition[move->From.y+1][move->From.x+1])
 				{
-					CurPosition[move->From.y+1][move->From.x+1] = -4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y+1][move->From.x+1] = -4;
+					else
+						CurPosition[move->From.y+1][move->From.x+1] = -6;
 				}
 				else
 				{
-					CurPosition[move->From.y+1][move->From.x+1] = 4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y+1][move->From.x+1] = 4;
+					else
+						CurPosition[move->From.y+1][move->From.x+1] = 6;
 				}
 				move->From.y += 2;
 				move->From.x += 2;
 				break;
 			case Left_Up:
 				CurPosition[move->From.y-2][move->From.x-2] = -5;
-				if(-2 == CurPosition[move->From.y-1][move->From.x-1])
+				if(-2*m_UpDown == CurPosition[move->From.y-1][move->From.x-1])
 				{
-					CurPosition[move->From.y-1][move->From.x-1] = -4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y-1][move->From.x-1] = -4;
+					else
+						CurPosition[move->From.y-1][move->From.x-1] = -6;
 				}
 				else
 				{
-					CurPosition[move->From.y-1][move->From.x-1] = 4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y-1][move->From.x-1] = 4;
+					else
+						CurPosition[move->From.y-1][move->From.x-1] = 6;
 				}
 				move->From.y -= 2;
 				move->From.x -= 2;
 				break;
 			case Right_Up:
 				CurPosition[move->From.y-2][move->From.x+2] = -5;
-				if(-2 == CurPosition[move->From.y-1][move->From.x+1])
+				if(-2*m_UpDown == CurPosition[move->From.y-1][move->From.x+1])
 				{
-					CurPosition[move->From.y-1][move->From.x+1] = -4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y-1][move->From.x+1] = -4;
+					else
+						CurPosition[move->From.y-1][move->From.x+1] = -6;
 				}
 				else
 				{
-					CurPosition[move->From.y-1][move->From.x+1] = 4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y-1][move->From.x+1] = 4;
+					else
+						CurPosition[move->From.y-1][move->From.x+1] = 6;
 				}
 				move->From.y -= 2;
 				move->From.x += 2;
@@ -523,52 +564,77 @@ void MakeMoveQi(CHESSMOVE* move,int CurPosition[10][10])
 			{
 			case Left_Down:
 				CurPosition[move->From.y + move->step_king_kongge1[i] + 1 + move->step_king_kongge2[i]][move->From.x - move->step_king_kongge1[i] - 1 - move->step_king_kongge2[i]] = -5;
-				if(-4 == CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] || -2 == CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1])
+				if(-2*m_UpDown == CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1])
 				{
-					CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] = -4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] = -4;
+					else
+						CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] = -6;
+					
 				}
 				else
 				{
-					CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] = 4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] = 4;
+					else
+						CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] = 6;
 				}
 				move->From.y += (move->step_king_kongge1[i] + move->step_king_kongge2[i] + 1);
 				move->From.x -= (move->step_king_kongge1[i] + move->step_king_kongge2[i] + 1);
 				break;
 			case Right_Down:
 				CurPosition[move->From.y + move->step_king_kongge1[i] + 1 + move->step_king_kongge2[i]][move->From.x + move->step_king_kongge1[i] + 1 + move->step_king_kongge2[i]] = -5;
-				if(-4 == CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] || -2 == CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x + move->step_king_kongge1[i] + 1])
+				if(-2*m_UpDown == CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x + move->step_king_kongge1[i] + 1])
 				{
-					CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x + move->step_king_kongge1[i] + 1] = -4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x + move->step_king_kongge1[i] + 1] = -4;
+					else
+						CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x + move->step_king_kongge1[i] + 1] = -6;
 				}
 				else
 				{
-					CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x + move->step_king_kongge1[i] + 1] = 4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x + move->step_king_kongge1[i] + 1] = 4;
+					else
+						CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x + move->step_king_kongge1[i] + 1] = 6;
 				}
 				move->From.y += (move->step_king_kongge1[i] + move->step_king_kongge2[i] + 1);
 				move->From.x += (move->step_king_kongge1[i] + move->step_king_kongge2[i] + 1);
 				break;
 			case Left_Up:
 				CurPosition[move->From.y - move->step_king_kongge1[i] - 1 - move->step_king_kongge2[i]][move->From.x - move->step_king_kongge1[i] - 1 - move->step_king_kongge2[i]] = -5;
-				if(-4 == CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] || -2 == CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x - move->step_king_kongge1[i] - 1])
+				if(-2*m_UpDown == CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x - move->step_king_kongge1[i] - 1])
 				{
-					CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x - move->step_king_kongge1[i] - 1] = -4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x - move->step_king_kongge1[i] - 1] = -4;
+					else
+						CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x - move->step_king_kongge1[i] - 1] = -6;		
 				}
 				else
 				{
-					CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x - move->step_king_kongge1[i] - 1] = 4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x - move->step_king_kongge1[i] - 1] = 4;
+					else
+						CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x - move->step_king_kongge1[i] - 1] = 6;
 				}
 				move->From.y -= (move->step_king_kongge1[i] + move->step_king_kongge2[i] + 1);
 				move->From.x -= (move->step_king_kongge1[i] + move->step_king_kongge2[i] + 1);
 				break;
 			case Right_Up:
 				CurPosition[move->From.y - move->step_king_kongge1[i] - 1 - move->step_king_kongge2[i]][move->From.x + move->step_king_kongge1[i] + 1 + move->step_king_kongge2[i]] = -5;
-				if(-4 == CurPosition[move->From.y + move->step_king_kongge1[i] + 1][move->From.x - move->step_king_kongge1[i] - 1] || -2 == CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x + move->step_king_kongge1[i] + 1])
+				if(-2*m_UpDown == CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x + move->step_king_kongge1[i] + 1])
 				{
-					CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x + move->step_king_kongge1[i] + 1] = -4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x + move->step_king_kongge1[i] + 1] = -4;
+					else
+						CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x + move->step_king_kongge1[i] + 1] = -6;	
 				}
 				else
 				{
-					CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x + move->step_king_kongge1[i] + 1] = 4;
+					if(1 == m_UpDown)
+						CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x + move->step_king_kongge1[i] + 1] = 4;
+					else
+						CurPosition[move->From.y - move->step_king_kongge1[i] - 1][move->From.x + move->step_king_kongge1[i] + 1] = 6;	
 				}
 				move->From.y -= (move->step_king_kongge1[i] + move->step_king_kongge2[i] + 1);
 				move->From.x += (move->step_king_kongge1[i] + move->step_king_kongge2[i] + 1);
@@ -713,10 +779,10 @@ BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		switch(LOWORD(wParam))
 		{
 		case iMenu+0://选择先后手
-			m_bGo = BLACK_GO;
+			m_bGo = BLACK_GO * m_UpDown;
 			break;
 		case iMenu+1:
-			m_bGo = WRITE_GO;
+			m_bGo = WRITE_GO * m_UpDown;
 			break;
 		case iMenu+2://设置搜索深度
 			m_pSE->SetSearchDepth(1);
@@ -750,6 +816,14 @@ BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			break;
 		case iMenu+13://撤销
 			UndoPosition();
+			break;
+		case iMenu+15://控制下方
+			if(1 == m_stackUndo.size())
+				m_UpDown = 1;
+			break;
+		case iMenu+16://控制上方
+			if(1 == m_stackUndo.size())
+				m_UpDown = -1;
 			break;
 		}
     }  
