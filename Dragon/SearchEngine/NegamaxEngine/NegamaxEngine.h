@@ -14,7 +14,7 @@ public:
 	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
 
 protected:
-	int NegaMax(int depth);
+	int NegaMax(int depth,int m_UpDown);
 
 };
 

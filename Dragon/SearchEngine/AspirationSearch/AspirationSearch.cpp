@@ -15,14 +15,14 @@ void CAspirationSearch::SearchAGoodMove(int position[10][10],int m_UpDown)
 	CPublicToMakeMove ptmm;
 	memcpy(CurPosition, position, sizeof(CurPosition));
 	m_nMaxDepth = m_nSearchDepth-1;
-	x= FAlphaBeta(m_nMaxDepth, -2000000, 2000000);
+	x= FAlphaBeta(m_nMaxDepth, -2000000, 2000000,m_UpDown);
 	m_nMaxDepth = m_nSearchDepth;
-	y = FAlphaBeta(m_nMaxDepth, x-500, x+500);
+	y = FAlphaBeta(m_nMaxDepth, x-500, x+500,m_UpDown);
 	if (y < x-500)
-		FAlphaBeta(m_nMaxDepth, -2000000, y);
+		FAlphaBeta(m_nMaxDepth, -2000000, y,m_UpDown);
 	if (y > x+500)
-		FAlphaBeta(m_nMaxDepth, y, 2000000);
-	MakeMove(&m_cmBestMove,ptmm,-1);
+		FAlphaBeta(m_nMaxDepth, y, 2000000,m_UpDown);
+	MakeMove(&m_cmBestMove,ptmm,WHITE * m_UpDown);
 	memcpy(position, CurPosition, sizeof(CurPosition));
 //	return 0;
 }

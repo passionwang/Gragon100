@@ -17,19 +17,19 @@ void CAlphaBetaAndTT::SearchAGoodMove(int position[10][10],int m_UpDown)
 	memcpy(CurPosition, position, sizeof(CurPosition));
 	CalculateInitHashKey(CurPosition);
 	m_nMaxDepth = m_nSearchDepth;
-	alphabeta(m_nMaxDepth, -2000000, 2000000);
-	MakeMove(&m_cmBestMove,ptmm,-1);
+	alphabeta(m_nMaxDepth, -2000000, 2000000,m_UpDown);
+	MakeMove(&m_cmBestMove,ptmm,WHITE * m_UpDown);
 	memcpy(position, CurPosition, sizeof(CurPosition));
 }
 
-int CAlphaBetaAndTT::alphabeta(int depth, int alpha, int beta)
+int CAlphaBetaAndTT::alphabeta(int depth, int alpha, int beta,int m_UpDown)
 {
 	int score;
 	int Count,i;
 	int side;
 	int mtype = (m_nMaxDepth%2 == depth%2) ? (-1) : (1);
 	CPublicToMakeMove ptmm;
-	i = IsGameOver(CurPosition, depth,mtype);	
+	i = IsGameOver(CurPosition, depth,mtype * m_UpDown);	
 	if (i != 0)
 		return i;
 
@@ -43,7 +43,10 @@ int CAlphaBetaAndTT::alphabeta(int depth, int alpha, int beta)
 	}
 	if (depth <= 0)	//叶子节点取估值
 	{
-		score = m_pEval->Eveluate(CurPosition,mtype,(m_nMaxDepth-depth)%2);
+		if(1 == m_UpDown)
+			score = m_pEval->Eveluate(CurPosition,mtype * m_UpDown,(m_nMaxDepth-depth)%2);
+		else
+			score = m_pEval->Eveluate(CurPosition,mtype * m_UpDown,(m_nMaxDepth-depth+1)%2);
 		EnterHashTable(exact, score, depth, side );
 		return score;
 	}
@@ -64,7 +67,7 @@ int CAlphaBetaAndTT::alphabeta(int depth, int alpha, int beta)
 		Hash_MakeMove(&m_pMG->m_nMoveList[depth][i], CurPosition);
 		MakeMove(&m_pMG->m_nMoveList[depth][i],ptmm);
 		
-		score = -alphabeta(depth - 1, -beta, -alpha);
+		score = -alphabeta(depth - 1, -beta, -alpha,m_UpDown);
 
 		Hash_UnMakeMove(&m_pMG->m_nMoveList[depth][i], CurPosition); 
 		UnMakeMove(&m_pMG->m_nMoveList[depth][i],ptmm); 

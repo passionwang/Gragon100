@@ -12,7 +12,7 @@ public:
 	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
 
 protected:
-	int PrincipalVariation(int depth, int alpha, int beta);
+	int PrincipalVariation(int depth, int alpha, int beta,int m_UpDown);
 
 
 };

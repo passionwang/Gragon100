@@ -13,7 +13,7 @@ public:
 	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
 
 protected:
-	int alphabeta(int depth, int alpha, int beta);
+	int alphabeta(int depth, int alpha, int beta,int m_UpDown);
 
 };
 
