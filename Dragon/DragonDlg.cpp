@@ -43,9 +43,33 @@ void UnMakeMove(int CurPosition[10][10]);
 void MakeMoveQi(CHESSMOVE* move,int CurPosition[10][10]);
 BOOL IsGameOver(int nType)
 {
-	if(0 == MG.CreatePossibleMove(m_ChessBoard,1,BLACK) && -1 == nType)
+	int Position[10][10];
+	for(int i=0;i<10;i++)
+	{
+		for(int j=0;j<10;j++)
+		{
+			Position[i][j] = m_ChessBoard[i][j];
+			if(6 == Position[i][j])
+			{
+				Position[i][j] = 1;
+			}
+			if(-6 == Position[i][j])
+			{
+				Position[i][j] = 2;
+			}
+			if(4 == Position[i][j])
+			{
+				Position[i][j] = -1;
+			}
+			if(6 == Position[i][j])
+			{
+				Position[i][j] = -2;
+			}
+		}
+	}
+	if(0 == MG.CreatePossibleMove(Position,1,BLACK) && -1 == nType)
 		return TRUE;
-	if (0 == MG.CreatePossibleMove(m_ChessBoard,1,WHITE) && 1 == nType)
+	if (0 == MG.CreatePossibleMove(Position,1,WHITE) && 1 == nType)
 		return TRUE;
 	return FALSE;
 }
@@ -316,7 +340,7 @@ void CDragonDlg::iMove()
 	InvalidateRect(NULL, FALSE);
 	UpdateWindow();
 	//记录走过的棋盘，加入链表
-	CUndoNode* pNode = new CUndoNode(m_ChessBoard,WRITE_GO * m_UpDown);
+	CUndoNode* pNode = new CUndoNode(m_ChessBoard,WRITE_GO);
 	m_stackUndo.push(pNode);
 
 	if (IsGameOver(WHITE * m_UpDown))
@@ -401,7 +425,7 @@ void CDragonDlg::Move(int iX,int iY)
 				BecomeKing(m_ChessBoard);
 				m_bGo = WRITE_GO;
 				//记录走过的棋盘，加入链表
-				CUndoNode* pNode = new CUndoNode(m_ChessBoard,BLACK_GO * m_UpDown);
+				CUndoNode* pNode = new CUndoNode(m_ChessBoard,BLACK_GO);
 				m_stackUndo.push(pNode);
 			}
 		}
