@@ -58,6 +58,9 @@
     <Filter Include="SearchEngine\NegaScout+TT+HH">
       <UniqueIdentifier>{e196b63b-17bc-4c3e-9747-2157a8f6cf0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FactoyToSearchEngine">
+      <UniqueIdentifier>{8c26f614-5c7b-4dde-94f4-a716f95c1b8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -129,6 +132,9 @@
     <ClInclude Include="SearchEngine\NegaScout+TT+HH\NegaScout_TT_HH.h">
       <Filter>SearchEngine\NegaScout+TT+HH</Filter>
     </ClInclude>
+    <ClInclude Include="FactoryToSearchEngine\FactorySearch.h">
+      <Filter>FactoyToSearchEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dragon.cpp">
@@ -187,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="SearchEngine\NegaScout+TT+HH\NegaScout_TT_HH.cpp">
       <Filter>SearchEngine\NegaScout+TT+HH</Filter>
+    </ClCompile>
+    <ClCompile Include="FactoryToSearchEngine\FactorySearch.cpp">
+      <Filter>FactoyToSearchEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

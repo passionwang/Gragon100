@@ -111,6 +111,7 @@ END_MESSAGE_MAP()
 CDragonDlg::CDragonDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CDragonDlg::IDD, pParent)
 	, m_bGo(BLACK_GO)
+	, m_SearchDepth(6)
 {
 	m_UpDown = 1;
 	for(int i=0;i<10;i++)
@@ -183,31 +184,17 @@ BOOL CDragonDlg::OnInitDialog()
 	m_nBoardHeight = BitMap.bmHeight;
 	m_BoardBmp.DeleteObject();
 
-
 	memcpy(m_ChessBoard, InitChessBoard, sizeof(InitChessBoard));//初始化棋盘
 	
-	
-
 	m_pEvel = new CEveluation;
-	//此处修改搜索引擎
-//	m_pSE = new CNegamaxEngine;//负极大值-最基本
-//	m_pSE = new CAlphaBetaEngine;//alpha-Beta剪枝
-//	m_pSE = new CFAlphaBetaEngine;//Fail-soft alpha-beta
-//	m_pSE = new CAspirationSearch;//渴望搜索
-//	m_pSE = new CPVS_Engine;//极小窗口搜索
-//	m_pSE = new CIDAlphabeta;//迭代深化
-//	m_pSE = new CAlphaBetaAndTT;//alpha-Beta剪枝+TT置换表
-//	m_pSE = new CAlphabeta_HH;//alpha-Beta剪枝+HH历史启发
-	m_pSE = new CNegaScout_TT_HH;//负极大值+TT置换表+HH历史启发
+	m_pSE = m_Factory.CreateSearchEngine(NegaScout_TT_HH);
 	m_pMG = &MoveGenerator;
-	
 	//此处设置搜索引擎深度
-	m_pSE->SetSearchDepth(6);
+	m_pSE->SetSearchDepth(m_SearchDepth);
 	//设置走法生成器-只有一个
 	m_pSE->SetMoveGenerator(m_pMG);
 	//设置估值-只有一个
 	m_pSE->SetEveluator(m_pEvel);
-//	m_MoveChess.nChessID = NOCHESS;
 	m_bGameOver = FALSE;//this code does not contents in books.
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -230,11 +217,6 @@ void DrawGo(CDC* pDC)
 	jBrush.CreateSolidBrush(RGB(0,255,0));  //绿
 	pDC->SelectObject(&jBrush);
 	pDC->Rectangle(iBL+11*iBS,iBT+iBS,iBL+12*iBS,iBT+8*iBS);
-	pDC->SelectStockObject(BLACK_BRUSH);
-	jBrush.DeleteObject();
-	jBrush.CreateSolidBrush(RGB(0,0,255));  //绿
-	pDC->SelectObject(&jBrush);
-	pDC->Rectangle(iBL+12*iBS,iBT+iBS,iBL+13*iBS,iBT+8*iBS);
 	pDC->SelectStockObject(BLACK_BRUSH);
 	jBrush.DeleteObject();
 }
@@ -809,33 +791,43 @@ BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			m_bGo = WRITE_GO * m_UpDown;
 			break;
 		case iMenu+2://设置搜索深度
+			m_SearchDepth = 1;
 			m_pSE->SetSearchDepth(1);
 			break;
 		case iMenu+3:
+			m_SearchDepth = 2;
 			m_pSE->SetSearchDepth(2);
 			break;
 		case iMenu+4:
+			m_SearchDepth = 3;
 			m_pSE->SetSearchDepth(3);
 			break;
 		case iMenu+5:
+			m_SearchDepth = 4;
 			m_pSE->SetSearchDepth(4);
 			break;
 		case iMenu+6:
+			m_SearchDepth = 5;
 			m_pSE->SetSearchDepth(5);
 			break;
 		case iMenu+7:
+			m_SearchDepth = 6;
 			m_pSE->SetSearchDepth(6);
 			break;
 		case iMenu+8:
+			m_SearchDepth = 7;
 			m_pSE->SetSearchDepth(7);
 			break;
 		case iMenu+9:
+			m_SearchDepth = 8;
 			m_pSE->SetSearchDepth(8);
 			break;
 		case iMenu+10:
+			m_SearchDepth = 9;
 			m_pSE->SetSearchDepth(9);
 			break;
 		case iMenu+11:
+			m_SearchDepth = 10;
 			m_pSE->SetSearchDepth(10);
 			break;
 		case iMenu+13://撤销
@@ -849,8 +841,99 @@ BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			if(1 == m_stackUndo.size())
 				m_UpDown = -1;
 			break;
+		case iMenu+17://搜索引擎
+			delete m_pSE;
+			m_pSE = NULL;
+			m_pSE = m_Factory.CreateSearchEngine(Alphabeta_HH);
+			m_pSE->SetSearchDepth(m_SearchDepth);
+			//设置走法生成器-只有一个
+			m_pSE->SetMoveGenerator(m_pMG);
+			//设置估值-只有一个
+			m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+18:
+			delete m_pSE;
+			m_pSE = NULL;
+			m_pSE = m_Factory.CreateSearchEngine(AlphaBetaAndTT);
+			m_pSE->SetSearchDepth(m_SearchDepth);
+			//设置走法生成器-只有一个
+			m_pSE->SetMoveGenerator(m_pMG);
+			//设置估值-只有一个
+			m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+19:
+			delete m_pSE;
+			m_pSE = NULL;
+			m_pSE = m_Factory.CreateSearchEngine(AlphaBetaEngine);
+			m_pSE->SetSearchDepth(m_SearchDepth);
+			//设置走法生成器-只有一个
+			m_pSE->SetMoveGenerator(m_pMG);
+			//设置估值-只有一个
+			m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+20:
+			delete m_pSE;
+			m_pSE = NULL;
+			m_pSE = m_Factory.CreateSearchEngine(AspirationSearch);
+			m_pSE->SetSearchDepth(m_SearchDepth);
+			//设置走法生成器-只有一个
+			m_pSE->SetMoveGenerator(m_pMG);
+			//设置估值-只有一个
+			m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+21:
+			delete m_pSE;
+			m_pSE = NULL;
+			m_pSE = m_Factory.CreateSearchEngine(FAlphaBetaEngine);
+			m_pSE->SetSearchDepth(m_SearchDepth);
+			//设置走法生成器-只有一个
+			m_pSE->SetMoveGenerator(m_pMG);
+			//设置估值-只有一个
+			m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+22:
+			delete m_pSE;
+			m_pSE = NULL;
+			m_pSE = m_Factory.CreateSearchEngine(IDAlphabeta);
+			m_pSE->SetSearchDepth(m_SearchDepth);
+			//设置走法生成器-只有一个
+			m_pSE->SetMoveGenerator(m_pMG);
+			//设置估值-只有一个
+			m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+23://暂时有问题
+			//delete m_pSE;
+			//m_pSE = NULL;
+			//m_pSE = m_Factory.CreateSearchEngine(NegamaxEngine);
+			//m_pSE->SetSearchDepth(m_SearchDepth);
+			////设置走法生成器-只有一个
+			//m_pSE->SetMoveGenerator(m_pMG);
+			////设置估值-只有一个
+			//m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+24:
+			delete m_pSE;
+			m_pSE = NULL;
+			m_pSE = m_Factory.CreateSearchEngine(NegaScout_TT_HH);
+			m_pSE->SetSearchDepth(m_SearchDepth);
+			//设置走法生成器-只有一个
+			m_pSE->SetMoveGenerator(m_pMG);
+			//设置估值-只有一个
+			m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+25:
+			delete m_pSE;
+			m_pSE = NULL;
+			m_pSE = m_Factory.CreateSearchEngine(PVS_Engine);
+			m_pSE->SetSearchDepth(m_SearchDepth);
+			//设置走法生成器-只有一个
+			m_pSE->SetMoveGenerator(m_pMG);
+			//设置估值-只有一个
+			m_pSE->SetEveluator(m_pEvel);
+			break;
 		}
     }  
+	
 	return CDialogEx::OnCommand(wParam, lParam);
 }
 

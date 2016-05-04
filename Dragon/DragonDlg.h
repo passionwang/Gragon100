@@ -1,17 +1,8 @@
 
 // DragonDlg.h : Í·ÎÄ¼þ
 //
-
 #pragma once
-#include "AlphaBetaEngine.h"
-#include "NegamaxEngine.h"
-#include "FAlphaBetaEngine.h"
-#include "AspirationSearch.h"
-#include "PVS_Engine.h"
-#include "IDAlphabeta.h"
-#include "AlphaBetaAndTT.h"
-#include "Alphabeta_HH.h"
-#include "NegaScout_TT_HH.h"
+#include "FactorySearch.h"
 #include "afxwin.h"
 #include <stack>
 using namespace std;
@@ -49,11 +40,11 @@ private:
 	int m_nBoardWidth; 
 	int m_nBoardHeight;
 	CSearchEngine *m_pSE;
+	int m_SearchDepth;
 	CMoveGenerator *m_pMG;
 	CEveluation *m_pEvel;
-
+	CFactoryToSearch m_Factory;
 	stack<CUndoNode*> m_stackUndo;
-//	CMoveGenerator m_oMG;
 	
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
