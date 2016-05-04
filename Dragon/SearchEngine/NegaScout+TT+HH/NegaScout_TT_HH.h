@@ -15,9 +15,7 @@ class CNegaScout_TT_HH :
 public:
 	CNegaScout_TT_HH();
 	virtual ~CNegaScout_TT_HH();
-
 	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
-
 protected:
 	int NegaScout(int depth, int alpha, int beta,int m_UpDown);
 };

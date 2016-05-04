@@ -18,7 +18,6 @@ void CFAlphaBetaEngine::SearchAGoodMove(int position[10][10],int m_UpDown)
 	FAlphaBeta(m_nMaxDepth, -2000000, 2000000,m_UpDown);
 	MakeMove(&m_cmBestMove,ptmm,WHITE * m_UpDown);
 	memcpy(position, CurPosition, sizeof(CurPosition));
-//	return 0;
 }
 
 
@@ -64,9 +63,7 @@ int CFAlphaBetaEngine::FAlphaBeta(int depth, int alpha, int beta,int m_UpDown)
 			if (score >= beta) //beta¼ôÖ¦
 				break;
 		}
-
 	}
-
 	return current;
 }
 

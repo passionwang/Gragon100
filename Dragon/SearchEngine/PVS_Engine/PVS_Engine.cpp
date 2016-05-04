@@ -15,12 +15,10 @@ void CPVS_Engine::SearchAGoodMove(int position[10][10],int m_UpDown)
 	CPublicToMakeMove ptmm;
 	memcpy(CurPosition, position, sizeof(CurPosition));
 	m_nMaxDepth = m_nSearchDepth;
-
 //	for (m_nMaxDepth = 1; m_nMaxDepth <= m_nSearchDepth; m_nMaxDepth++)
 	{
 	   PrincipalVariation(m_nMaxDepth, -2000000, 2000000,m_UpDown);
 	}
-	
 	MakeMove(&m_cmBestMove,ptmm,WHITE * m_UpDown);
 	memcpy(position, CurPosition, sizeof(CurPosition));
 }
@@ -90,6 +88,5 @@ int CPVS_Engine::PrincipalVariation(int depth, int alpha, int beta,int m_UpDown)
 			UnMakeMove(&m_pMG->m_nMoveList[depth][i],ptmm); 
 		}
 	}
-
 	return best;
 }

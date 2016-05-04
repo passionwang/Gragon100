@@ -24,5 +24,4 @@ void CAspirationSearch::SearchAGoodMove(int position[10][10],int m_UpDown)
 		FAlphaBeta(m_nMaxDepth, y, 2000000,m_UpDown);
 	MakeMove(&m_cmBestMove,ptmm,WHITE * m_UpDown);
 	memcpy(position, CurPosition, sizeof(CurPosition));
-//	return 0;
 }

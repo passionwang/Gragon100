@@ -8,8 +8,7 @@ CSearchEngine::CSearchEngine()
 
 CSearchEngine::~CSearchEngine()
 {
-	//delete m_pMG;
-	//delete m_pEval;
+	
 }
 
 void CSearchEngine::MakeMove(CHESSMOVE* move,CPublicToMakeMove& ptmm,int type)

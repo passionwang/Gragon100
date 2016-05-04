@@ -73,7 +73,6 @@ int CAlphabeta_HH::alphabeta(int depth, int alpha, int beta,int m_UpDown)
 			bestmove = i;
 			break;
 		}
-				
 	}
 	if (bestmove != -1)
 	EnterHistoryScore(&m_pMG->m_nMoveList[depth][bestmove], depth);

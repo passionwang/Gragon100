@@ -9,7 +9,6 @@ CAlphaBetaAndTT::~CAlphaBetaAndTT()
 {
 }
 
-
 int G_nCountTT;
 void CAlphaBetaAndTT::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
@@ -51,8 +50,6 @@ int CAlphaBetaAndTT::alphabeta(int depth, int alpha, int beta,int m_UpDown)
 		return score;
 	}
 
-
-
 	Count = m_pMG->CreatePossibleMove(CurPosition, depth,mtype);
 	if(1 == Count && depth == m_nMaxDepth)
 	{
@@ -84,7 +81,6 @@ int CAlphaBetaAndTT::alphabeta(int depth, int alpha, int beta,int m_UpDown)
 			if(depth == m_nMaxDepth)
 				m_cmBestMove = m_pMG->m_nMoveList[depth][i];
 		}
-
 	}
 
     if (eval_is_exact) 

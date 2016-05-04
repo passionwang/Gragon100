@@ -17,16 +17,12 @@ void CNegamaxEngine::SearchAGoodMove(int position[10][10],int m_UpDown)
 {
 	CPublicToMakeMove ptmm;
 	m_nMaxDepth = m_nSearchDepth;
-
 	memcpy(CurPosition, position, sizeof(CurPosition));
-	
 	NegaMax(m_nMaxDepth,m_UpDown);
-	
 	MakeMove(&m_cmBestMove,ptmm,WHITE * m_UpDown);
 	memcpy(position, CurPosition, sizeof(CurPosition));
 }
 extern int count;
-
 int CNegamaxEngine::NegaMax(int depth,int m_UpDown)
 {
 	int current = -2000000 ;
@@ -57,7 +53,6 @@ int CNegamaxEngine::NegaMax(int depth,int m_UpDown)
 
 	for (i=0;i<Count;i++) 
 	{
-
 		MakeMove(&m_pMG->m_nMoveList[depth][i],ptmm);
 		score = -NegaMax(depth - 1,m_UpDown);
 		UnMakeMove(&m_pMG->m_nMoveList[depth][i],ptmm); 
@@ -70,9 +65,7 @@ int CNegamaxEngine::NegaMax(int depth,int m_UpDown)
 				m_cmBestMove = m_pMG->m_nMoveList[depth][i];
 			}
 		}
-
 	}
-
 	return current;
 }
 

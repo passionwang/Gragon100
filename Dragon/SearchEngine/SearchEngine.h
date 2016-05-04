@@ -11,15 +11,10 @@ class CSearchEngine : public CPublicToMakeMove
 public:
 	CSearchEngine();
 	virtual ~CSearchEngine();
-	
 	virtual void SearchAGoodMove(int position[10][10],int m_UpDown) = 0;
-	
 	virtual void SetSearchDepth(BYTE nDepth){m_nSearchDepth = nDepth;}
-	
 	virtual void SetEveluator(CEveluation *pEval){m_pEval = pEval;}
-
 	virtual void SetMoveGenerator(CMoveGenerator *pMG){m_pMG = pMG;}
-
 protected:
 	virtual void MakeMove(CHESSMOVE* move,CPublicToMakeMove& ptmm,int type = 0);
 	virtual void UnMakeMove(CHESSMOVE* move,CPublicToMakeMove& ptmm);
