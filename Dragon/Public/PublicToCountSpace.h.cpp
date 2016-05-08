@@ -14,7 +14,7 @@ CPublicToCountSpace::~CPublicToCountSpace()
 BYTE CPublicToCountSpace::ZuoShang(BYTE x,BYTE y,int Board[10][10])
 {
 	BYTE i=0;
-	if(0>=x||0>=y)
+	if(0>=x||0>=y||x>=10||y>=10)
 	{
 		return 0;
 	}
@@ -34,7 +34,7 @@ BYTE CPublicToCountSpace::ZuoShang(BYTE x,BYTE y,int Board[10][10])
 BYTE CPublicToCountSpace::YouShang(BYTE x,BYTE y,int Board[10][10])
 {
 	BYTE i=0;
-	if(0>=x||9<=y)
+	if(0>=x||9<=y||x>=10||y>=10)
 	{
 		return 0;
 	}
@@ -54,7 +54,7 @@ BYTE CPublicToCountSpace::YouShang(BYTE x,BYTE y,int Board[10][10])
 BYTE CPublicToCountSpace::ZuoXia(BYTE x,BYTE y,int Board[10][10])
 {
 	BYTE i=0;
-	if(9<=x||0>=y)
+	if(9<=x||0>=y||x>=10||y>=10)
 	{
 		return 0;
 	}
@@ -74,7 +74,7 @@ BYTE CPublicToCountSpace::ZuoXia(BYTE x,BYTE y,int Board[10][10])
 BYTE CPublicToCountSpace::YouXia(BYTE x,BYTE y,int Board[10][10])
 {
 	BYTE i=0;
-	if(9<=x||9<=y)
+	if(9<=x||9<=y||x>=10||y>=10)
 	{
 		return 0;
 	}
