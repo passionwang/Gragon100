@@ -102,8 +102,8 @@ void CEveluation::count_qi_num()
 	//估值  
 	m_value_white += 5000*m_num_white; //子力差值5000
 	m_value_black += 5000*m_num_black;
-	m_value_white += 40000*m_num_white;//王差值4000
-	m_value_black += 40000*m_num_black;
+	m_value_white += 40000*m_num_king_white;//王差值4000
+	m_value_black += 40000*m_num_king_black;
 	m_value_white += 80*m_num_hang_white[0];//行数加分//优先成王//白棋
 	m_value_white += 85*m_num_hang_white[1];
 	m_value_white += 90*m_num_hang_white[2];
@@ -349,8 +349,8 @@ void CEveluation::count_sanjiao_num()
 		}
 	}
 	//估值   //链的差值80
-	m_value_white += 100*m_num_bianxian_white;
-	m_value_black += 100*m_num_bianxian_black;
+	m_value_white += 100*m_num_sanjiao_white;
+	m_value_black += 100*m_num_sanjiao_black;
 }
 //5.左中右//343
 void CEveluation::count_zuozhongyou()
