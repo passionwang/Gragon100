@@ -61,7 +61,7 @@ BOOL IsGameOver(int nType)
 			{
 				Position[i][j] = -1;
 			}
-			if(6 == Position[i][j])
+			if(-4 == Position[i][j])
 			{
 				Position[i][j] = -2;
 			}
