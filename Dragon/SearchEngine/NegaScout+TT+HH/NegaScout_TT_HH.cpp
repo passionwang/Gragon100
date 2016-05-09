@@ -38,6 +38,8 @@ void CNegaScout_TT_HH::SearchAGoodMove(int position[10][10],int m_UpDown)
 	memcpy(position,CurPosition,sizeof(CurPosition));
 }
 int G_nCountTTHH;
+int GTime = 0;
+int ETime = 0;
 int CNegaScout_TT_HH::NegaScout(int depth, int alpha, int beta,int m_UpDown)
 {
 	bool bIsSure = false;
@@ -62,15 +64,18 @@ int CNegaScout_TT_HH::NegaScout(int depth, int alpha, int beta,int m_UpDown)
 	
 	if (depth <= 0)	//叶子节点取估值
 	{
+		int Now1 = GetTickCount();
 		if(1 == m_UpDown)
 			score = m_pEval->Eveluate(CurPosition,mtype * m_UpDown,(m_nMaxDepth-depth)%2);
 		else
 			score = m_pEval->Eveluate(CurPosition,mtype * m_UpDown,(m_nMaxDepth-depth+1)%2);
+		ETime += GetTickCount() - Now1;
 		EnterHashTable(exact, score, depth, side );
 		return score;
 	}
-	
+	int Now2 = GetTickCount();
 	Count = m_pMG->CreatePossibleMove(CurPosition, depth, mtype * m_UpDown);
+	GTime += GetTickCount() - Now2;
 	if(1 == Count && depth == m_nMaxDepth)
 	{
 		m_cmBestMove = m_pMG->m_nMoveList[depth][0];

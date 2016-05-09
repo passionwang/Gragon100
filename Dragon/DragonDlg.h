@@ -56,4 +56,13 @@ public:
 	void DestoryListPosition();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();
+	CEdit m_Edit_Nodes;
+	CEdit m_Edit_TT;
+	CEdit m_Edit_TTHH;
+	CEdit m_Edit_ETime;
+	CEdit m_Edit_GTime;
+	CEdit m_Edit_WriteCount;
+	CEdit m_Edit_Black_Count;
+	int m_All_Time;
+	CEdit m_Edit_AllTime;
 };

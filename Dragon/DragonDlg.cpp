@@ -112,6 +112,7 @@ CDragonDlg::CDragonDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CDragonDlg::IDD, pParent)
 	, m_bGo(BLACK_GO)
 	, m_SearchDepth(6)
+	, m_All_Time(0)
 {
 	m_UpDown = 1;
 	for(int i=0;i<10;i++)
@@ -132,6 +133,14 @@ void CDragonDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT2, m_Output);
+	DDX_Control(pDX, IDC_EDIT1, m_Edit_Nodes);
+	DDX_Control(pDX, IDC_EDIT3, m_Edit_TT);
+	DDX_Control(pDX, IDC_EDIT4, m_Edit_TTHH);
+	DDX_Control(pDX, IDC_EDIT5, m_Edit_ETime);
+	DDX_Control(pDX, IDC_EDIT6, m_Edit_GTime);
+	DDX_Control(pDX, IDC_EDIT7, m_Edit_WriteCount);
+	DDX_Control(pDX, IDC_EDIT8, m_Edit_Black_Count);
+	DDX_Control(pDX, IDC_EDIT9, m_Edit_AllTime);
 }
 
 BEGIN_MESSAGE_MAP(CDragonDlg, CDialogEx)
@@ -229,10 +238,12 @@ void CDragonDlg::OnPaint()
 	CPaintDC dc(this);
 	CDC MemDC;
 	int i, j;
+	int nCount_Write = 0;
+	int nCount_Black = 0;
 	POINT pt;
 	CBitmap *pOldBmp;
 
-	DrawGo(&dc);
+	//DrawGo(&dc);
 
 	MemDC.CreateCompatibleDC(&dc);
 	m_BoardBmp.LoadBitmap(IDB_BOARD);
@@ -240,6 +251,22 @@ void CDragonDlg::OnPaint()
 	for (i = 0; i < 10; i++)
 		for (j = 0; j < 10; j++)
 		{
+			if(m_ChessBoard[i][j] == 1 || m_ChessBoard[i][j] == 2)
+			{
+				++nCount_Black;
+			}
+			else if(m_ChessBoard[i][j] == -1 || m_ChessBoard[i][j] == -2)
+			{
+				++nCount_Write;
+			}
+			else if(m_ChessBoard[i][j] == 6 || m_ChessBoard[i][j] == -6)
+			{
+				++nCount_Black;
+			}
+			else if(m_ChessBoard[i][j] == -4 || m_ChessBoard[i][j] == 4)
+			{
+				++nCount_Write;
+			}
 			if (m_ChessBoard[i][j] == NOCHESS)
 				continue;
 			pt.x = j*GRILLEHEIGHT ;
@@ -278,10 +305,15 @@ void CDragonDlg::OnPaint()
 				break;
 			}
 		}
-		dc.BitBlt(BORDERWIDTH, BORDERHEIGHT, m_nBoardWidth, m_nBoardHeight, &MemDC, 0, 0, SRCCOPY);
-		MemDC.SelectObject(&pOldBmp);
-		MemDC.DeleteDC();
-		m_BoardBmp.DeleteObject();
+	dc.BitBlt(BORDERWIDTH, BORDERHEIGHT, m_nBoardWidth, m_nBoardHeight, &MemDC, 0, 0, SRCCOPY);
+	MemDC.SelectObject(&pOldBmp);
+	MemDC.DeleteDC();
+	m_BoardBmp.DeleteObject();
+	CString sNodeCount;
+	sNodeCount.Format(L"%d",nCount_Black);
+	m_Edit_Black_Count.SetWindowText(sNodeCount);
+	sNodeCount.Format(L"%d",nCount_Write);
+	m_Edit_WriteCount.SetWindowText(sNodeCount);
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
@@ -302,23 +334,42 @@ int iInArea(int x,int y,int x1,int y1,int x2,int y2)
 extern int G_nCountEv;//记录估值结点数;
 extern int G_nCountTT;
 extern int G_nCountTTHH;
+extern int GTime;
+extern int ETime;
 void CDragonDlg::iMove()          
 {
 	if (TRUE == m_bGameOver || WRITE_GO != m_bGo)
 		return;
 	m_bGo = BLACK_GO;
 	int timecount;
+	int TimeCha = 0;
 	timecount = GetTickCount();
 
 	m_pSE->SearchAGoodMove(m_ChessBoard,m_UpDown);	
-
+	TimeCha = GetTickCount() - timecount;
+	m_All_Time += TimeCha;
 	BecomeKing(m_ChessBoard);//4.成王判断
 	CString sNodeCount;
-	sNodeCount.Format(L" Cost %d ms. %d Nodes were eveluated. %d TT Node Be Found.%d TTHH Node Be Found.", GetTickCount() - timecount,G_nCountEv,G_nCountTT,G_nCountTTHH);
+	sNodeCount.Format(L"%d", TimeCha);
 	m_Output.SetWindowText(sNodeCount);
+	sNodeCount.Format(L"%d",G_nCountEv);
+	m_Edit_Nodes.SetWindowText(sNodeCount);
+	sNodeCount.Format(L"%d",G_nCountTT);
+	m_Edit_TT.SetWindowText(sNodeCount);
+	sNodeCount.Format(L"%d",G_nCountTTHH);
+	m_Edit_TTHH.SetWindowText(sNodeCount);
+	sNodeCount.Format(L"%d",GTime);
+	m_Edit_GTime.SetWindowText(sNodeCount);
+	sNodeCount.Format(L"%d",ETime);
+	m_Edit_ETime.SetWindowText(sNodeCount);
+	sNodeCount.Format(L"%ds",m_All_Time/1000);
+	m_Edit_AllTime.SetWindowText(sNodeCount);
+	
 	G_nCountEv = 0;
 	G_nCountTT = 0;
 	G_nCountTTHH = 0;
+	//GTime = 0;
+	//ETime = 0;
 	InvalidateRect(NULL, FALSE);
 	UpdateWindow();
 	//记录走过的棋盘，加入链表
@@ -413,6 +464,11 @@ void CDragonDlg::Move(int iX,int iY)
 		}
 		InvalidateRect(NULL,FALSE);
 		UpdateWindow();
+		if(m_bGo == WRITE_GO)
+		{
+				//自动行棋
+				iMove();
+		}
 		if (IsGameOver(BLACK * m_UpDown))
 		{
 			m_bGameOver = TRUE;
@@ -930,6 +986,9 @@ BOOL CDragonDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			m_pSE->SetMoveGenerator(m_pMG);
 			//设置估值-只有一个
 			m_pSE->SetEveluator(m_pEvel);
+			break;
+		case iMenu+26:
+			iMove();
 			break;
 		}
     }  
