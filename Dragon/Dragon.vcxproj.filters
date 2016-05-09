@@ -81,9 +81,6 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Eveluation\Eveluation.h">
-      <Filter>Eveluation</Filter>
-    </ClInclude>
     <ClInclude Include="MoveGenerator\MoveGenerator.h">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
@@ -135,6 +132,9 @@
     <ClInclude Include="FactoryToSearchEngine\FactorySearch.h">
       <Filter>FactoyToSearchEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Eveluation\Eveluation.h">
+      <Filter>Eveluation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dragon.cpp">
@@ -145,9 +145,6 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Eveluation\Eveluation.cpp">
-      <Filter>Eveluation</Filter>
     </ClCompile>
     <ClCompile Include="MoveGenerator\MoveGenerator.cpp">
       <Filter>MoveGenerator</Filter>
@@ -196,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="FactoryToSearchEngine\FactorySearch.cpp">
       <Filter>FactoyToSearchEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Eveluation\Eveluation.cpp">
+      <Filter>Eveluation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -32,6 +32,10 @@ public:
 	void FangZhiChengWang();
 	//11.王压制
 	void WY();
+	//三角阵型
+	void SanJiao();
+	//链
+	void Lian();
 	void shuzuTwo_shuzuOne(BYTE i,BYTE j,BYTE shuzu[51]);
 public:
 	//黑白棋各自数组

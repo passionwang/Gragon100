@@ -33,8 +33,10 @@ int CEveluation::Eveluate(int position[10][10], int TURE,int nCeng)
 	}
 	count_qi_num();       //1.棋子数量
 	count_bianxian_num(); //2.边线个数
-	count_lian_num();     //3.链数量
-	count_sanjiao_num();  //4.三角形数量
+	//count_lian_num();     //3.链数量
+	//count_sanjiao_num();  //4.三角形数量
+	SanJiao();             //三角数量
+	Lian();                //连成三个以上的线
 	count_zuozhongyou();  //5.左中右
 	count_yazhi_num();    //6.压制数量
 	AnQuanZhi();          //7安全值
@@ -168,6 +170,25 @@ void CEveluation::count_bianxian_num()
 	m_value_white += 40*m_num_bianxian_white;//边线子力40
 	m_value_black += 40*m_num_bianxian_black;
 }
+void CEveluation::SanJiao()
+{
+	int i,j;
+	for(i=0;i<10;i++)
+	{
+		for(j=0;j<10;j++)
+		{
+			if(((-1==m_position[i][j]||-2==m_position[i][j])&&(-1==m_position[i+1][j+1]||-2==m_position[i+1][j+1])&&(-1==m_position[i+1][j-1]||-2==m_position[i+1][j+1]))||((-1==m_position[i][j]||-2==m_position[i][j])&&(-1==m_position[i+1][j+1]||-2==m_position[i+1][j+1])&&(-1==m_position[i+2][j]||-2==m_position[i+2][j]))||((-1==m_position[i][j]||-2==m_position[i][j])&&(-1==m_position[i+1][j-1]||-2==m_position[i+1][j-1])&&(-1==m_position[i+2][j]||-2==m_position[i+2][j]))||((-1==m_position[i][j]||-2==m_position[i][j])&&(-1==m_position[i+1][j+1]||-2==m_position[i+1][j+1])&&(-1==m_position[i][j+2]||-2==m_position[i][j+2])))
+				{
+					m_value_white+=50;
+				}
+			if(((1==m_position[i][j]||2==m_position[i][j])&&(1==m_position[i+1][j+1]||2==m_position[i+1][j+1])&&(1==m_position[i+1][j-1]||2==m_position[i+1][j+1]))||((1==m_position[i][j]||2==m_position[i][j])&&(1==m_position[i+1][j+1]||2==m_position[i+1][j+1])&&(1==m_position[i+2][j]||2==m_position[i+2][j]))||((1==m_position[i][j]||2==m_position[i][j])&&(1==m_position[i+1][j-1]||2==m_position[i+1][j-1])&&(1==m_position[i+2][j]||2==m_position[i+2][j]))||((1==m_position[i][j]||2==m_position[i][j])&&(1==m_position[i+1][j+1]||2==m_position[i+1][j+1])&&(1==m_position[i][j+2]||2==m_position[i][j+2])))
+				{
+					m_value_black+=50;
+				}
+		}
+	}
+}
+	
 //3.链数量
 void CEveluation::count_lian_num()
 {
@@ -353,6 +374,27 @@ void CEveluation::count_sanjiao_num()
 	m_value_black += 100*m_num_sanjiao_black;
 }
 //5.左中右//343
+void CEveluation:: Lian()
+{
+	int i,j;
+	for(i=0;i<10;i++)
+	{
+		for(j=0;j<10;j++)
+		{
+			if(i<7&&i>0&&j<9&&j>2)
+			{
+				if(((-1==m_position[i+1][j-1]||-2==m_position[i+1][j-1])&&(-1==m_position[i+2][j]||-2==m_position[i+2][j])&&(-1==m_position[i+3][j+1]||-2==m_position[i+3][j+1]))||((-1==m_position[i][j-2]||-2==m_position[i][j-2])&&(-1==m_position[i+1][j-1]||-2==m_position[i+2][j])&&(-1==m_position[i+2][j]||-2==m_position[i+2][j]))||((-1==m_position[i-1][j-3]||-2==m_position[i-1][j-3])&&(-1==m_position[i][j-2]||-2==m_position[i][j-2])&&(-1==m_position[i+1][j-1]||-2==m_position[i+1][j-1])))
+				{
+					m_value_white+=50;
+				}
+				if(((-1==m_position[i+1][j+1]||-2==m_position[i+1][j+1])&&(-1==m_position[i+2][j]||-2==m_position[i+2][j])&&(-1==m_position[i+3][j-1]||-2==m_position[i+3][j-1]))||((-1==m_position[i][j+2]||-2==m_position[i][j+2])&&(-1==m_position[i+1][j+1]||-2==m_position[i+1][j+1])&&(-1==m_position[i+2][j]||-2==m_position[i+2][j]))||((-1==m_position[i-1][j+3]||-2==m_position[i-1][j+3])&&(-1==m_position[i][j+2]||-2==m_position[i][j+2])&&(-1==m_position[i+1][j+1]||-2==m_position[i+1][j+1])))
+				{
+					m_value_white+=50;
+				}
+			}
+		}
+	}
+}
 void CEveluation::count_zuozhongyou()
 {
 	m_num_left_white = 0;//初始化左中右数据
@@ -1031,46 +1073,46 @@ void CEveluation::WY()
 		switch(max)
 		{
 		case 1:
-			m_value_black += 2000;
+			m_value_black += 5000;
 			break;
 		case 2:
-			m_value_black += 4000;
-			break;
-		case 3:
-			m_value_black += 6000;
-			break;
-		case 4:
-			m_value_black += 8000;
-			break;
-		case 5:
 			m_value_black += 10000;
 			break;
-		case 6:
-			m_value_black += 12000;
+		case 3:
+			m_value_black += 15000;
 			break;
-		case 7:
-			m_value_black += 14000;
-			break;
-		case 8:
-			m_value_black += 16000;
-			break;
-		case 9:
-			m_value_black += 18000;
-			break;
-		case 10:
+		case 4:
 			m_value_black += 20000;
 			break;
+		case 5:
+			m_value_black += 25000;
+			break;
+		case 6:
+			m_value_black += 30000;
+			break;
+		case 7:
+			m_value_black += 35000;
+			break;
+		case 8:
+			m_value_black += 40000;
+			break;
+		case 9:
+			m_value_black += 45000;
+			break;
+		case 10:
+			m_value_black += 50000;
+			break;
 		case 11:
-			m_value_black += 22000;
+			m_value_black += 55000;
 			break;
 		case 12:
-			m_value_black += 24000;
+			m_value_black += 60000;
 			break;
 		case 13:
-			m_value_black += 26000;
+			m_value_black += 65000;
 			break;
 		case 14:
-			m_value_black += 28000;
+			m_value_black += 70000;
 			break;
 		}
 	}
