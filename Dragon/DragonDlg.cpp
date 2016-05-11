@@ -464,15 +464,15 @@ void CDragonDlg::Move(int iX,int iY)
 		}
 		InvalidateRect(NULL,FALSE);
 		UpdateWindow();
-		if(m_bGo == WRITE_GO)
-		{
-				//自动行棋
-				iMove();
-		}
 		if (IsGameOver(BLACK * m_UpDown))
 		{
 			m_bGameOver = TRUE;
 			MessageBox(L"Game Over! Press New Game to replay...");
+		}
+		if(m_bGo == WRITE_GO || m_bGameOver == FALSE)
+		{
+				//自动行棋
+				iMove();
 		}
 		break;
 	}
