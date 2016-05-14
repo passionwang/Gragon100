@@ -54,6 +54,8 @@ public:
 	CEdit m_Output;
 	void UndoPosition();
 	void DestoryListPosition();
+	void TranslateToChessBoard();
+	void TranslateToTranslateBoard();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();
 	CEdit m_Edit_Nodes;

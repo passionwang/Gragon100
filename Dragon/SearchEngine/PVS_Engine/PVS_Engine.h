@@ -9,9 +9,9 @@ class CPVS_Engine : public CSearchEngine
 public:
 	CPVS_Engine();
 	virtual ~CPVS_Engine();
-	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
+	virtual void SearchAGoodMove(int position[10][10]);
 protected:
-	int PrincipalVariation(int depth, int alpha, int beta,int m_UpDown);
+	int PrincipalVariation(int depth, int alpha, int beta);
 };
 
 #endif // __INCLUDE_PVSENGINE_H__

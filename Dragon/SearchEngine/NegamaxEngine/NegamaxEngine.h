@@ -10,9 +10,9 @@ class CNegamaxEngine : public CSearchEngine
 public:
 	CNegamaxEngine();
 	virtual ~CNegamaxEngine();
-	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
+	virtual void SearchAGoodMove(int position[10][10]);
 protected:
-	int NegaMax(int depth,int m_UpDown);
+	int NegaMax(int depth);
 };
 
 #endif // __INCLUDE_NEGAMAXENGINE_H__

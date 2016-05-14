@@ -8,9 +8,9 @@ class CIDAlphabeta : public CSearchEngine
 public:
 	CIDAlphabeta();
 	virtual ~CIDAlphabeta();
-	virtual void SearchAGoodMove(int position[10][10],int m_UpDown);
+	virtual void SearchAGoodMove(int position[10][10]);
 protected:
-	int alphabeta(int depth, int alpha, int beta,int m_UpDown);
+	int alphabeta(int depth, int alpha, int beta);
 	int m_nTimeCount;
 };
 

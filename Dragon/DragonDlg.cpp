@@ -22,6 +22,7 @@ const int iBS=50;//棋盘棋位单位
 int m_UpDown;
 CMoveGenerator MG;
 int m_ChessBoard[10][10];
+int m_TranslateBoard[10][10];
 const int InitChessBoard[10][10] =
 {
 	
@@ -336,6 +337,36 @@ extern int G_nCountTT;
 extern int G_nCountTTHH;
 extern int GTime;
 extern int ETime;
+void CDragonDlg::TranslateToChessBoard()
+{
+	for(int i=0;i<10;i++)
+	{
+		for(int j=0;j<10;j++)
+		{
+			if(4 == m_TranslateBoard[9-i][9-j])
+			{
+				m_ChessBoard[i][j] = 6;
+				continue;
+			}
+			if(-4 == m_TranslateBoard[9-i][9-j])
+			{
+				m_ChessBoard[i][j] = -6;
+				continue;
+			}
+			m_ChessBoard[i][j] = -1 * m_TranslateBoard[9-i][9-j];
+		}
+	}
+}
+void CDragonDlg::TranslateToTranslateBoard()
+{
+	for(int i=0;i<10;i++)
+	{
+		for(int j=0;j<10;j++)
+		{
+			m_TranslateBoard[i][j] = -1 * m_ChessBoard[9-i][9-j];
+		}
+	}
+}
 void CDragonDlg::iMove()          
 {
 	if (TRUE == m_bGameOver || WRITE_GO != m_bGo)
@@ -344,8 +375,16 @@ void CDragonDlg::iMove()
 	int timecount;
 	int TimeCha = 0;
 	timecount = GetTickCount();
-
-	m_pSE->SearchAGoodMove(m_ChessBoard,m_UpDown);	
+	if(-1 == m_UpDown)
+	{
+		TranslateToTranslateBoard();
+		m_pSE->SearchAGoodMove(m_TranslateBoard);
+		TranslateToChessBoard();
+	}
+	else
+	{
+		m_pSE->SearchAGoodMove(m_ChessBoard);
+	}
 	TimeCha = GetTickCount() - timecount;
 	m_All_Time += TimeCha;
 	BecomeKing(m_ChessBoard);//4.成王判断

@@ -22,7 +22,7 @@ CNegaScout_TT_HH::~CNegaScout_TT_HH()
 	
 }
 
-void CNegaScout_TT_HH::SearchAGoodMove(int position[10][10],int m_UpDown)
+void CNegaScout_TT_HH::SearchAGoodMove(int position[10][10])
 {
 	CPublicToMakeMove ptmm;
 	memcpy(CurPosition, position, sizeof(CurPosition));
@@ -33,14 +33,14 @@ void CNegaScout_TT_HH::SearchAGoodMove(int position[10][10],int m_UpDown)
 //	NegaScout(m_nMaxDepth, -20000, 20000);
 //	m_nMaxDepth = m_nSearchDepth;
 //	for (m_nMaxDepth = 1; m_nMaxDepth <= m_nSearchDepth; m_nMaxDepth++)
-	NegaScout(m_nMaxDepth, -2000000, 2000000,m_UpDown);
-	MakeMove(&m_cmBestMove,ptmm,WHITE * m_UpDown);
+	NegaScout(m_nMaxDepth, -2000000, 2000000);
+	MakeMove(&m_cmBestMove,ptmm,WHITE);
 	memcpy(position,CurPosition,sizeof(CurPosition));
 }
 int G_nCountTTHH;
 int GTime = 0;
 int ETime = 0;
-int CNegaScout_TT_HH::NegaScout(int depth, int alpha, int beta,int m_UpDown)
+int CNegaScout_TT_HH::NegaScout(int depth, int alpha, int beta)
 {
 	bool bIsSure = false;
 	int Count,i;
@@ -49,7 +49,7 @@ int CNegaScout_TT_HH::NegaScout(int depth, int alpha, int beta,int m_UpDown)
 	int score;
 	int mtype = (m_nMaxDepth%2 == depth%2) ? (-1) : (1);
 	CPublicToMakeMove ptmm;
-	i = IsGameOver(CurPosition, depth,mtype * m_UpDown);	
+	i = IsGameOver(CurPosition, depth,mtype);	
 	if (i != 0)
 		return i;
 	
@@ -65,16 +65,13 @@ int CNegaScout_TT_HH::NegaScout(int depth, int alpha, int beta,int m_UpDown)
 	if (depth <= 0)	//叶子节点取估值
 	{
 		int Now1 = GetTickCount();
-		if(1 == m_UpDown)
-			score = m_pEval->Eveluate(CurPosition,mtype * m_UpDown,(m_nMaxDepth-depth)%2);
-		else
-			score = m_pEval->Eveluate(CurPosition,mtype * m_UpDown,(m_nMaxDepth-depth+1)%2);
+		score = m_pEval->Eveluate(CurPosition,mtype,(m_nMaxDepth-depth)%2);
 		ETime += GetTickCount() - Now1;
 		EnterHashTable(exact, score, depth, side );
 		return score;
 	}
 	int Now2 = GetTickCount();
-	Count = m_pMG->CreatePossibleMove(CurPosition, depth, mtype * m_UpDown);
+	Count = m_pMG->CreatePossibleMove(CurPosition, depth, mtype);
 	GTime += GetTickCount() - Now2;
 	if(1 == Count && depth == m_nMaxDepth)
 	{
@@ -98,11 +95,11 @@ int CNegaScout_TT_HH::NegaScout(int depth, int alpha, int beta,int m_UpDown)
 		Hash_MakeMove(&m_pMG->m_nMoveList[depth][i], CurPosition);
 		MakeMove(&m_pMG->m_nMoveList[depth][i],ptmm);
 		
-		t = -NegaScout(depth-1 , -b, -a ,m_UpDown);
+		t = -NegaScout(depth-1 , -b, -a);
 		
 		if (t > a && t < beta && i > 0) 
 		{
-			a = -NegaScout (depth-1, -beta, -t ,m_UpDown);     /* re-search */
+			a = -NegaScout (depth-1, -beta, -t);     /* re-search */
 			eval_is_exact = 1;
 			if(depth == m_nMaxDepth)
 			{
@@ -145,3 +142,10 @@ int CNegaScout_TT_HH::NegaScout(int depth, int alpha, int beta,int m_UpDown)
 		EnterHashTable(upper_bound, a, depth,side);
 	return a;
 }
+
+
+
+
+//初始化8根线程
+//将第一层次的任务均分给8跟线程
+//
